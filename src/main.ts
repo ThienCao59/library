@@ -14,6 +14,9 @@ import '@mdi/font/css/materialdesignicons.css'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/reset.css'
 
+// ApexCharts
+import VueApexCharts from 'vue3-apexcharts'
+
 const vuetify = createVuetify({
   components,
   directives,
@@ -37,5 +40,6 @@ app.use(createPinia())
 app.use(router)
 app.use(vuetify)
 app.use(Antd)
+app.use(VueApexCharts)
 
 app.mount('#app')

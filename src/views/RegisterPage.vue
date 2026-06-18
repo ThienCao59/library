@@ -1,122 +1,152 @@
 <template>
   <div class="auth-page-container">
     <div class="split-container signup-style">
-      <!-- LEFT PANEL: Premium Nature Scenery SVG Illustration exactly like Sample 1 -->
+      <!-- LEFT PANEL: Open Book with Knowledge Particles -->
       <div class="scenery-panel">
-        <svg class="nature-illustration" viewBox="0 0 400 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Sky / Background -->
-          <rect width="400" height="500" fill="#EBF3E8" />
-          
-          <!-- Soft Clouds -->
-          <path d="M 20 80 Q 40 70 60 80 T 100 80 T 140 80 Z" fill="#FAF9F6" opacity="0.6" />
-          <path d="M 220 60 Q 240 50 260 60 T 300 60 T 340 60 Z" fill="#FAF9F6" opacity="0.6" />
-          
-          <!-- Sun / Light glow -->
-          <circle cx="200" cy="180" r="140" fill="#FAF9F6" opacity="0.4" />
-          
-          <!-- Distant Mountains -->
-          <path d="M 0 350 L 80 250 L 180 320 L 280 220 L 400 310 L 400 500 L 0 500 Z" fill="#C3DEC6" opacity="0.7" />
-          
-          <!-- Flying Birds -->
-          <path d="M 240 180 Q 245 175 250 180 Q 255 175 260 180" fill="none" stroke="#7A8F7C" stroke-width="1.5" />
-          <path d="M 265 170 Q 268 166 272 170 Q 276 166 280 170" fill="none" stroke="#7A8F7C" stroke-width="1.2" />
-
-          <!-- Cozy cabins/houses with red roofs -->
-          <g transform="translate(130, 270)">
-            <rect x="0" y="10" width="32" height="20" fill="#FAF9F6" rx="2" />
-            <polygon points="0,10 16,0 32,10" fill="#D35230" />
-            <rect x="12" y="18" width="8" height="12" fill="#434D4B" />
+        <svg class="reading-illustration" viewBox="0 0 400 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="rp-bgGlow" cx="50%" cy="60%" r="55%">
+              <stop offset="0%" stop-color="#EDD9A3" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#FAF3E0" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="rp-pageL" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="100%" stop-color="#F5ECD7"/>
+            </linearGradient>
+            <linearGradient id="rp-pageR" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FFFDF7"/>
+              <stop offset="100%" stop-color="#EDE0C8"/>
+            </linearGradient>
+            <filter id="rp-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="rp-softGlow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <polygon id="rp-star4" points="0,-5 1.2,-1.2 5,0 1.2,1.2 0,5 -1.2,1.2 -5,0 -1.2,-1.2"/>
+          </defs>
+          <rect width="400" height="520" fill="#FAF3E0"/>
+          <circle cx="200" cy="300" r="180" fill="url(#rp-bgGlow)"/>
+          <g fill="#1E5652" opacity="0.08">
+            <circle cx="40" cy="50" r="2.5"/><circle cx="80" cy="30" r="1.5"/>
+            <circle cx="360" cy="60" r="2"/><circle cx="330" cy="40" r="1.5"/>
+            <circle cx="30" cy="460" r="2"/><circle cx="370" cy="450" r="2.5"/>
+            <circle cx="60" cy="200" r="1.5"/><circle cx="350" cy="180" r="2"/>
+            <circle cx="100" cy="420" r="1.5"/><circle cx="310" cy="410" r="1.5"/>
           </g>
-          <g transform="translate(260, 290) scale(0.8)">
-            <rect x="0" y="10" width="32" height="20" fill="#FAF9F6" rx="2" />
-            <polygon points="0,10 16,0 32,10" fill="#D35230" />
-            <rect x="12" y="18" width="8" height="12" fill="#434D4B" />
+          <!-- Open Book -->
+          <g transform="translate(200, 295)">
+            <ellipse cx="0" cy="80" rx="115" ry="14" fill="#1E5652" opacity="0.07"/>
+            <path d="M -5,60 Q -125,55 -130,0 Q -125,-55 -5,-60 Z" fill="#C8A96E" opacity="0.35"/>
+            <path d="M -5,-62 Q -108,-57 -112,0 Q -108,57 -5,62 Z" fill="url(#rp-pageL)" stroke="#D9C9A8" stroke-width="1"/>
+            <line x1="-95" y1="-38" x2="-18" y2="-38" stroke="#C9B88A" stroke-width="1.8" opacity="0.55"/>
+            <line x1="-90" y1="-24" x2="-18" y2="-24" stroke="#C9B88A" stroke-width="1.8" opacity="0.45"/>
+            <line x1="-96" y1="-10" x2="-18" y2="-10" stroke="#C9B88A" stroke-width="1.8" opacity="0.4"/>
+            <line x1="-88" y1="4"  x2="-18" y2="4"  stroke="#C9B88A" stroke-width="1.8" opacity="0.45"/>
+            <line x1="-93" y1="18" x2="-18" y2="18" stroke="#C9B88A" stroke-width="1.8" opacity="0.4"/>
+            <line x1="-82" y1="32" x2="-18" y2="32" stroke="#C9B88A" stroke-width="1.8" opacity="0.3"/>
+            <line x1="-90" y1="46" x2="-18" y2="46" stroke="#C9B88A" stroke-width="1.8" opacity="0.25"/>
+            <circle cx="-60" cy="-48" r="6" fill="none" stroke="#1E5652" stroke-width="1.5" opacity="0.3"/>
+            <line x1="-60" y1="-54" x2="-60" y2="-42" stroke="#1E5652" stroke-width="1" opacity="0.3"/>
+            <line x1="-66" y1="-48" x2="-54" y2="-48" stroke="#1E5652" stroke-width="1" opacity="0.3"/>
+            <path d="M 5,-62 Q 108,-57 112,0 Q 108,57 5,62 Z" fill="url(#rp-pageR)" stroke="#D9C9A8" stroke-width="1"/>
+            <line x1="18" y1="-38" x2="95" y2="-38" stroke="#C9B88A" stroke-width="1.8" opacity="0.55"/>
+            <line x1="18" y1="-24" x2="90" y2="-24" stroke="#C9B88A" stroke-width="1.8" opacity="0.45"/>
+            <line x1="18" y1="-10" x2="96" y2="-10" stroke="#C9B88A" stroke-width="1.8" opacity="0.4"/>
+            <line x1="18" y1="4"  x2="88" y2="4"  stroke="#C9B88A" stroke-width="1.8" opacity="0.45"/>
+            <line x1="18" y1="18" x2="93" y2="18" stroke="#C9B88A" stroke-width="1.8" opacity="0.4"/>
+            <line x1="18" y1="32" x2="82" y2="32" stroke="#C9B88A" stroke-width="1.8" opacity="0.3"/>
+            <line x1="18" y1="46" x2="90" y2="46" stroke="#C9B88A" stroke-width="1.8" opacity="0.25"/>
+            <rect x="-5" y="-62" width="10" height="124" rx="3" fill="#1E5652"/>
+            <rect x="-3" y="-62" width="6" height="124" rx="2" fill="#2A7A74" opacity="0.5"/>
+            <g class="rp-page-turn">
+              <path d="M 5,-62 Q 65,-58 72,-15 Q 65,30 5,62 Z" fill="#FFF8EE" stroke="#D9C9A8" stroke-width="0.8" opacity="0.75"/>
+            </g>
           </g>
-
-          <!-- Rolling Forest Hills -->
-          <path d="M 0 420 Q 120 370 240 400 T 400 360 L 400 500 L 0 500 Z" fill="#84A98C" />
-          <path d="M 0 450 Q 150 410 300 440 T 400 420 L 400 500 L 0 500 Z" fill="#52796F" />
-          <path d="M 0 480 Q 180 440 360 470 T 400 450 L 400 500 L 0 500 Z" fill="#354F52" />
-          <path d="M 0 495 L 400 495 L 400 500 L 0 500 Z" fill="#2F3E46" />
-
-          <!-- Elegant Pine Trees -->
-          <g transform="translate(20, 240) scale(0.6)" fill="#354F52">
-            <polygon points="30,0 0,60 60,60" />
-            <polygon points="30,30 5,90 55,90" />
-            <polygon points="30,60 10,120 50,120" />
-            <rect x="25" y="120" width="10" height="20" fill="#533527" />
+          <!-- Orbs -->
+          <circle class="rp-orb ro1" cx="160" cy="230" r="7"   fill="#CF7C07" filter="url(#rp-softGlow)" opacity="0.9"/>
+          <circle class="rp-orb ro2" cx="200" cy="218" r="5"   fill="#1E5652" filter="url(#rp-softGlow)" opacity="0.85"/>
+          <circle class="rp-orb ro3" cx="240" cy="225" r="8"   fill="#E8A020" filter="url(#rp-softGlow)" opacity="0.8"/>
+          <circle class="rp-orb ro4" cx="178" cy="210" r="4"   fill="#2A9D8F" filter="url(#rp-glow)"     opacity="0.9"/>
+          <circle class="rp-orb ro5" cx="222" cy="205" r="6"   fill="#CF7C07" filter="url(#rp-softGlow)" opacity="0.75"/>
+          <circle class="rp-orb ro6" cx="195" cy="200" r="3.5" fill="#F4A261" filter="url(#rp-glow)"     opacity="0.85"/>
+          <circle class="rp-orb ro7" cx="215" cy="195" r="5"   fill="#1E5652" filter="url(#rp-softGlow)" opacity="0.7"/>
+          <circle class="rp-orb ro8" cx="170" cy="215" r="3"   fill="#E8A020" filter="url(#rp-glow)"     opacity="0.8"/>
+          <!-- Sparkle stars -->
+          <use href="#rp-star4" class="rp-spark rs1"  transform="translate(155,185)" fill="#CF7C07" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs2"  transform="translate(205,170)" fill="#1E5652" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs3"  transform="translate(248,178)" fill="#E8A020" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs4"  transform="translate(182,160)" fill="#2A9D8F" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs5"  transform="translate(228,155)" fill="#CF7C07" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs6"  transform="translate(168,145)" fill="#F4A261" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs7"  transform="translate(215,138)" fill="#1E5652" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs8"  transform="translate(192,130)" fill="#E8A020" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs9"  transform="translate(240,125)" fill="#CF7C07" filter="url(#rp-glow)"/>
+          <use href="#rp-star4" class="rp-spark rs10" transform="translate(160,120)" fill="#2A9D8F" filter="url(#rp-glow)"/>
+          <!-- Twinkle dots -->
+          <circle class="rp-twinkle rt1"  cx="130" cy="160" r="2.5" fill="#CF7C07" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt2"  cx="270" cy="150" r="2"   fill="#1E5652" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt3"  cx="145" cy="110" r="3"   fill="#E8A020" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt4"  cx="260" cy="105" r="2.5" fill="#CF7C07" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt5"  cx="200" cy="95"  r="2"   fill="#2A9D8F" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt6"  cx="175" cy="80"  r="3"   fill="#F4A261" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt7"  cx="225" cy="75"  r="2"   fill="#CF7C07" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt8"  cx="155" cy="65"  r="2.5" fill="#1E5652" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt9"  cx="245" cy="60"  r="2"   fill="#E8A020" filter="url(#rp-glow)"/>
+          <circle class="rp-twinkle rt10" cx="200" cy="50"  r="3"   fill="#CF7C07" filter="url(#rp-glow)"/>
+          <!-- Floating mini books -->
+          <g class="rp-float-book rfb1" transform="translate(58,140)">
+            <rect x="0" y="0" width="30" height="38" rx="3" fill="#1E5652"/>
+            <rect x="3" y="3" width="24" height="32" rx="1" fill="#FFF8EE"/>
+            <line x1="7" y1="11" x2="23" y2="11" stroke="#C9B88A" stroke-width="1.5"/>
+            <line x1="7" y1="18" x2="20" y2="18" stroke="#C9B88A" stroke-width="1.5"/>
+            <line x1="7" y1="25" x2="22" y2="25" stroke="#C9B88A" stroke-width="1.5"/>
           </g>
-          <g transform="translate(60, 260) scale(0.5)" fill="#354F52">
-            <polygon points="30,0 0,60 60,60" />
-            <polygon points="30,30 5,90 55,90" />
-            <rect x="25" y="90" width="10" height="20" fill="#533527" />
+          <g class="rp-float-book rfb2" transform="translate(308,110)">
+            <rect x="0" y="0" width="26" height="34" rx="3" fill="#CF7C07"/>
+            <rect x="3" y="3" width="20" height="28" rx="1" fill="#FFF8EE"/>
+            <circle cx="13" cy="17" r="6" fill="none" stroke="#CF7C07" stroke-width="1.5"/>
           </g>
-          <g transform="translate(320, 250) scale(0.7)" fill="#354F52">
-            <polygon points="30,0 0,60 60,60" />
-            <polygon points="30,30 5,90 55,90" />
-            <polygon points="30,60 10,120 50,120" />
-            <rect x="25" y="120" width="10" height="20" fill="#533527" />
+          <g class="rp-float-book rfb3" transform="translate(48,360)">
+            <rect x="0" y="0" width="24" height="30" rx="2" fill="#E07A5F"/>
+            <rect x="3" y="3" width="18" height="24" rx="1" fill="#FFF8EE"/>
+            <line x1="6" y1="10" x2="18" y2="10" stroke="#E07A5F" stroke-width="1.5"/>
+            <line x1="6" y1="16" x2="14" y2="16" stroke="#E07A5F" stroke-width="1.5"/>
           </g>
-
-          <!-- Forest Trees in Foreground -->
-          <g transform="translate(360, 310) scale(0.9)" fill="#2F3E46">
-            <polygon points="20,0 0,50 40,50" />
-            <polygon points="20,20 5,70 35,70" />
-            <rect x="17" y="70" width="6" height="15" fill="#533527" />
+          <g class="rp-float-book rfb4" transform="translate(318,360)">
+            <rect x="0" y="0" width="28" height="22" rx="2" fill="#2A9D8F"/>
+            <rect x="3" y="3" width="22" height="16" rx="1" fill="#FFF8EE"/>
+            <line x1="6" y1="9" x2="22" y2="9" stroke="#2A9D8F" stroke-width="1.5"/>
+            <line x1="6" y1="14" x2="18" y2="14" stroke="#2A9D8F" stroke-width="1.5"/>
           </g>
-
-          <!-- Elegant Deer Silhouettes -->
-          <!-- Deer 1 (Looking right) -->
-          <g transform="translate(70, 385) scale(0.5)" fill="#1E332E">
-            <!-- Body -->
-            <ellipse cx="40" cy="40" rx="20" ry="12" />
-            <!-- Neck & Head -->
-            <path d="M 52 35 C 55 25 58 12 55 5 C 53 2 48 2 45 4 M 45 4 L 40 8 L 48 18 Z" />
-            <!-- Antlers -->
-            <path d="M 48 4 Q 45 -10 35 -15 M 48 4 Q 52 -12 60 -18 M 43 -8 Q 40 -8 38 -12 M 53 -10 Q 56 -10 58 -14" stroke="#1E332E" stroke-width="2" fill="none" stroke-linecap="round" />
-            <!-- Legs -->
-            <rect x="25" y="48" width="4" height="22" rx="1" />
-            <rect x="33" y="48" width="4" height="22" rx="1" />
-            <rect x="45" y="46" width="4" height="24" rx="1" />
-            <rect x="51" y="46" width="3.5" height="24" rx="1" />
-            <!-- Tail -->
-            <path d="M 20 34 Q 16 30 18 36 Z" />
+          <!-- SMARTLIB text -->
+          <g transform="translate(200,448)">
+            <text class="rp-bl rbl1" x="-74" y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#1E5652" letter-spacing="3">S</text>
+            <text class="rp-bl rbl2" x="-52" y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#1E5652" letter-spacing="3">M</text>
+            <text class="rp-bl rbl3" x="-26" y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#1E5652" letter-spacing="3">A</text>
+            <text class="rp-bl rbl4" x="-4"  y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#1E5652" letter-spacing="3">R</text>
+            <text class="rp-bl rbl5" x="20"  y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#1E5652" letter-spacing="3">T</text>
+            <text class="rp-bl rbl6" x="42"  y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#CF7C07" letter-spacing="3">L</text>
+            <text class="rp-bl rbl7" x="60"  y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#CF7C07" letter-spacing="3">I</text>
+            <text class="rp-bl rbl8" x="72"  y="0" font-family="'Inter',sans-serif" font-size="22" font-weight="900" fill="#CF7C07" letter-spacing="3">B</text>
           </g>
-
-          <!-- Deer 2 (Smaller, eating) -->
-          <g transform="translate(130, 410) scale(0.4)" fill="#1E332E">
-            <!-- Body -->
-            <ellipse cx="40" cy="40" rx="18" ry="11" />
-            <!-- Neck & Head leaning down -->
-            <path d="M 50 38 C 55 42 62 48 68 49 C 70 50 72 48 70 45 C 65 38 55 33 50 33 Z" />
-            <!-- Legs -->
-            <rect x="26" y="48" width="3.5" height="18" rx="1" />
-            <rect x="32" y="48" width="3.5" height="18" rx="1" />
-            <rect x="44" y="46" width="3.5" height="20" rx="1" />
-            <rect x="49" y="46" width="3.2" height="20" rx="1" />
-          </g>
-
-          <!-- Scenic overlay text -->
-          <text x="200" y="110" font-family="'Inter', sans-serif" font-size="28" font-weight="900" fill="#789A7E" letter-spacing="10" text-anchor="middle" opacity="0.8">WELCOME</text>
-        </svg>
-
-        <!-- Wavy Divider Mask that perfectly divides screen exactly like Sample 1 -->
-        <svg class="scenery-wave" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M 100,0 C 70,25 90,50 65,75 C 50,90 60,100 100,100 Z" fill="#1E5652" />
+          <text x="200" y="472" font-family="'Inter',sans-serif" font-size="11" font-weight="600" fill="#8B7D6B" letter-spacing="3" text-anchor="middle">DIGITAL LIBRARY</text>
         </svg>
       </div>
 
       <!-- RIGHT PANEL: Elegant Sign Up Form in deep emerald matching Sample 1 -->
       <div class="form-panel">
         <div class="form-scroll-container">
-          <h2 class="welcome-hello">Hello!</h2>
-          <p class="welcome-glad mb-6">We are glad to see you :)</p>
+          <h2 class="welcome-hello">{{ t('register.title') }}</h2>
+          <p class="welcome-glad mb-6">{{ t('register.subtitle') }}</p>
 
           <!-- OAuth Social Pill Buttons -->
           <div class="social-login-container mb-6">
             <a-button class="btn-social-google" shape="round">
               <v-icon icon="mdi-google" class="mr-2 google-icon"></v-icon>
-              Sign up with Google
+              {{ t('register.google.btn') }}
             </a-button>
             <a-button class="btn-social-circle" shape="circle">
               <v-icon icon="mdi-facebook"></v-icon>
@@ -128,7 +158,7 @@
 
           <div class="divider-or mb-6">
             <span class="divider-line"></span>
-            <span class="divider-text">Or</span>
+            <span class="divider-text">{{ t('register.or') }}</span>
             <span class="divider-line"></span>
           </div>
 
@@ -137,20 +167,20 @@
             <div class="form-row">
               <div class="form-col">
                 <a-form-item
-                  label="Name"
+                  :label="t('register.name')"
                   name="fullName"
-                  :rules="[{ required: true, message: 'Please input your name!' }]"
+                  :rules="[{ required: true, message: t('register.name') + '!' }]"
                 >
-                  <a-input v-model:value="formState.fullName" placeholder="Your Full Name" class="pill-input" />
+                  <a-input v-model:value="formState.fullName" :placeholder="t('register.name')" class="pill-input" />
                 </a-form-item>
               </div>
               <div class="form-col">
                 <a-form-item
-                  label="Username"
+                  :label="t('register.username')"
                   name="username"
-                  :rules="[{ required: true, message: 'Please input your username!' }]"
+                  :rules="[{ required: true, message: t('register.username') + '!' }]"
                 >
-                  <a-input v-model:value="formState.username" placeholder="Choose a username" class="pill-input" />
+                  <a-input v-model:value="formState.username" :placeholder="t('register.username')" class="pill-input" />
                 </a-form-item>
               </div>
             </div>
@@ -158,11 +188,11 @@
             <div class="form-row">
               <div class="form-col">
                 <a-form-item
-                  label="Email Address"
+                  :label="t('register.email')"
                   name="email"
                   :rules="[
-                    { required: true, message: 'Please input your email!' },
-                    { type: 'email', message: 'Invalid email format!' }
+                    { required: true, message: t('register.email') + '!' },
+                    { type: 'email', message: t('register.email.invalid') }
                   ]"
                 >
                   <a-input v-model:value="formState.email" placeholder="example@domain.com" class="pill-input" />
@@ -170,10 +200,10 @@
               </div>
               <div class="form-col">
                 <a-form-item
-                  label="Password"
+                  :label="t('register.password')"
                   name="password"
                   :rules="[
-                    { required: true, message: 'Vui lòng nhập mật khẩu!' },
+                    { required: true, message: t('register.password') + '!' },
                     { validator: validatePasswordStrength }
                   ]"
                 >
@@ -185,10 +215,10 @@
             <div class="form-row">
               <div class="form-col">
                 <a-form-item
-                  label="Repeat Password"
+                  :label="t('register.confirm.password')"
                   name="confirmPassword"
                   :rules="[
-                    { required: true, message: 'Please repeat password!' },
+                    { required: true, message: t('register.confirm.password') + '!' },
                     { validator: validateConfirmPassword }
                   ]"
                 >
@@ -196,32 +226,37 @@
                 </a-form-item>
               </div>
               <div class="form-col">
-                <!-- Symmetrical empty placeholder column to align layout nicely -->
+                <a-form-item
+                  :label="t('register.phone')"
+                  name="phoneNumber"
+                >
+                  <a-input v-model:value="formState.phoneNumber" placeholder="0912 345 678" class="pill-input" />
+                </a-form-item>
               </div>
+
             </div>
 
-            <!-- Custom terms checkbox -->
             <div class="mb-6">
               <a-checkbox v-model:checked="formState.agree" class="terms-checkbox">
-                I agree <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>
+                {{ t('register.terms') }}<a href="#" class="terms-link">{{ t('register.terms.link') }}</a>{{ t('register.and') }}<a href="#" class="terms-link">{{ t('register.privacy') }}</a>
               </a-checkbox>
             </div>
 
             <a-form-item class="mb-2">
               <a-button type="primary" html-type="submit" class="btn-signup-pill" :loading="loading" :disabled="!formState.agree">
-                Sign Up
+                {{ t('register.btn') }}
               </a-button>
             </a-form-item>
           </a-form>
 
           <div class="footer-links-signup mt-6">
-            <span>Already have an account? </span>
-            <a href="#" class="btn-signin-link" @click.prevent="$router.push('/login')">Sign In</a>
+            <span>{{ t('register.have.account') }}</span>
+            <a href="#" class="btn-signin-link" @click.prevent="$router.push('/login')">{{ t('register.signin.link') }}</a>
           </div>
 
           <div class="text-center mt-4">
             <a href="#" class="back-link" @click.prevent="$router.push('/')">
-              <v-icon icon="mdi-arrow-left" class="mr-1"></v-icon> Back to home
+              <v-icon icon="mdi-arrow-left" class="mr-1"></v-icon> {{ t('register.back.home') }}
             </a>
           </div>
         </div>
@@ -234,8 +269,8 @@
         <div class="success-icon-wrapper mb-4">
           <v-icon icon="mdi-check-circle" color="success" size="64"></v-icon>
         </div>
-        <h3 class="success-title mb-2">Đăng Ký Thành Công!</h3>
-        <p class="success-subtitle mb-6 text-grey-darken-1">Thẻ thư viện số đã tự động được kích hoạt cho tài khoản mới!</p>
+        <h3 class="success-title mb-2">{{ t('register.success.title') }}</h3>
+        <p class="success-subtitle mb-6 text-grey-darken-1">{{ t('register.success.sub') }}</p>
         
         <!-- Virtual card -->
         <div class="virtual-card-wrapper mx-auto mb-8">
@@ -250,17 +285,17 @@
             </div>
             
             <div class="card-body my-6 text-left">
-              <div class="card-label">MÃ THẺ THƯ VIỆN</div>
+              <div class="card-label">{{ t('register.card.code') }}</div>
               <div class="card-number">{{ generatedCardNumber }}</div>
             </div>
 
             <div class="card-footer d-flex justify-space-between text-left">
               <div>
-                <div class="card-label">HỌ VÀ TÊN</div>
+                <div class="card-label">{{ t('register.card.name') }}</div>
                 <div class="card-val">{{ formState.fullName }}</div>
               </div>
               <div class="text-right">
-                <div class="card-label">HẠN SỬ DỤNG</div>
+                <div class="card-label">{{ t('register.card.expiry') }}</div>
                 <div class="card-val">{{ expiryDateString }}</div>
               </div>
             </div>
@@ -268,7 +303,7 @@
         </div>
 
         <a-button type="primary" shape="round" class="btn-success-close" @click="closeModalAndRedirect">
-          Vào Trang Đăng Nhập
+          {{ t('register.success.btn') }}
         </a-button>
       </div>
     </a-modal>
@@ -278,10 +313,13 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { apiClient } from '@/utils/apiClient'
 import { message } from 'ant-design-vue'
+import { useI18nStore } from '@/stores/i18nStore'
 
 const router = useRouter()
+const i18n = useI18nStore()
+const t = (key: Parameters<typeof i18n.t>[0]) => i18n.t(key)
 const loading = ref(false)
 const showSuccessModal = ref(false)
 const generatedCardNumber = ref('')
@@ -291,8 +329,9 @@ const formState = reactive({
   email: '',
   password: '',
   confirmPassword: '',
-  username: '', // Default computed internally or mapped to email
-  role: 'Reader', // Default role
+  username: '',
+  role: 'Reader',
+  phoneNumber: '',
   agree: false
 })
 
@@ -314,11 +353,7 @@ const validatePasswordStrength = (_rule: any, value: string) => {
   const hasSpecial = /[^A-Za-z0-9]/.test(value)
   
   if (!hasMinLength || !hasUpperCase || !hasLowerCase || !hasDigit || !hasSpecial) {
-    return Promise.reject(
-      new Error(
-        'Mật khẩu phải gồm ít nhất: 6 ký tự, 1 chữ hoa, 1 chữ thường, 1 chữ số, và 1 ký tự đặc biệt (e.g. @, #, !, $).'
-      )
-    )
+    return Promise.reject(new Error(t('register.password.strength')))
   }
   
   return Promise.resolve()
@@ -329,7 +364,7 @@ const validateConfirmPassword = (_rule: any, value: string) => {
     return Promise.resolve()
   }
   if (value !== formState.password) {
-    return Promise.reject(new Error('Passwords do not match!'))
+    return Promise.reject(new Error(t('register.password.mismatch')))
   }
   return Promise.resolve()
 }
@@ -337,19 +372,19 @@ const validateConfirmPassword = (_rule: any, value: string) => {
 const onFinish = async (values: any) => {
   loading.value = true
   try {
-    const response = await axios.post('http://localhost:5208/api/Auth/register', {
+    const response = await apiClient.post('/api/identity/Auth/register', {
       Username: formState.username,
       Email: formState.email,
       Password: formState.password,
       FullName: formState.fullName,
-      Role: formState.role
+      PhoneNumber: formState.phoneNumber || null
     })
     
     const data = response.data
     // Accept both camelCase and PascalCase from API Gateway
     generatedCardNumber.value = data.cardNumber || data.CardNumber || `LIB-${Math.floor(100000 + Math.random() * 900000)}`
     showSuccessModal.value = true
-    message.success('Đăng ký tài khoản thành công!')
+    message.success(t('register.success.msg'))
   } catch (error: any) {
     console.error('Register API Error:', error)
     const responseData = error.response?.data
@@ -357,15 +392,14 @@ const onFinish = async (values: any) => {
     if (responseData?.Errors && Array.isArray(responseData.Errors)) {
       // Loop through all Microsoft Identity validation errors and display them
       responseData.Errors.forEach((err: any) => {
-        message.error(err.Description || err.description || 'Lỗi đăng ký từ hệ thống!')
+        message.error(err.Description || err.description || t('register.error.default'))
       })
     } else if (responseData?.errors && Array.isArray(responseData.errors)) {
-      // Handle camelCase from JSON serializer
       responseData.errors.forEach((err: any) => {
-        message.error(err.description || err.Description || 'Lỗi đăng ký từ hệ thống!')
+        message.error(err.description || err.Description || t('register.error.default'))
       })
     } else {
-      const errMessage = responseData?.Message || responseData?.message || 'Đăng ký thất bại. Vui lòng kiểm tra kết nối API!'
+      const errMessage = responseData?.Message || responseData?.message || t('register.error.connection')
       message.error(errMessage)
     }
   } finally {
@@ -386,7 +420,7 @@ const closeModalAndRedirect = () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #FAF9F6;
+  background-color: #ffffff;
   padding: 40px;
 }
 
@@ -402,37 +436,25 @@ const closeModalAndRedirect = () => {
   position: relative;
 }
 
-/* LEFT PANEL (Nature Scenery) */
+/* LEFT PANEL (Book Illustration) */
 .scenery-panel {
   flex: 1.1;
   position: relative;
   height: 100%;
-  background-color: #EBF3E8;
+  background-color: #FAF3E0;
   overflow: hidden;
 }
 
-.nature-illustration {
+.reading-illustration {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-/* Wavy separator linking panels beautifully */
-.scenery-wave {
-  position: absolute;
-  top: 0;
-  right: -2px;
-  bottom: 0;
-  width: 120px;
-  height: 100%;
-  z-index: 10;
-  pointer-events: none;
+  display: block;
 }
 
 /* RIGHT PANEL (Sign Up Form) */
 .form-panel {
   flex: 1.2;
-  background-color: #1E5652; /* Deep emerald color scheme matching landing page */
+  background-color: #1E5652; /* Lighter emerald color scheme */
   color: white;
   display: flex;
   flex-direction: column;
@@ -586,8 +608,11 @@ const closeModalAndRedirect = () => {
   box-shadow: none !important;
 }
 
-:deep(.pill-input input::placeholder) {
-  color: rgba(255, 255, 255, 0.4) !important;
+:deep(.pill-input::placeholder),
+:deep(.pill-input input::placeholder),
+:deep(.pill-input .ant-input::placeholder) {
+  color: rgba(255, 255, 255, 0.35) !important;
+  opacity: 1 !important;
 }
 
 :deep(.pill-input:hover), :deep(.pill-input:focus-within) {
@@ -600,7 +625,7 @@ const closeModalAndRedirect = () => {
 }
 
 :deep(.ant-form-item-label > label) {
-  color: #BBE1DC !important;
+  color: white !important;
   font-weight: 700 !important;
   font-size: 13px !important;
   padding-bottom: 2px !important;
@@ -628,8 +653,8 @@ const closeModalAndRedirect = () => {
   width: 100%;
   height: 46px !important;
   border-radius: 24px !important;
-  background-color: #BBE1DC !important; /* Soft mint/teal light color from Sample 1 */
-  border-color: #BBE1DC !important;
+  background-color: #FAF9F6 !important;
+  border-color: #FAF9F6 !important;
   color: #1E5652 !important; /* Dark text matching background */
   font-weight: 800 !important;
   font-size: 15px !important;
@@ -786,4 +811,79 @@ const closeModalAndRedirect = () => {
     padding: 40px 30px;
   }
 }
+
+@keyframes rp-rise {
+  0%   { transform: translateY(0px) scale(1);   opacity: 0.9; }
+  60%  { opacity: 1; }
+  100% { transform: translateY(-160px) scale(0.4); opacity: 0; }
+}
+@keyframes rp-sparkle {
+  0%   { transform: translateY(0px) rotate(0deg) scale(1);   opacity: 1; }
+  50%  { transform: translateY(-80px) rotate(180deg) scale(1.4); opacity: 0.9; }
+  100% { transform: translateY(-160px) rotate(360deg) scale(0.3); opacity: 0; }
+}
+@keyframes rp-twinkle {
+  0%,100% { opacity: 0.2; transform: scale(0.7); }
+  50%     { opacity: 1;   transform: scale(1.6); }
+}
+@keyframes rp-float {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-14px); }
+}
+@keyframes rp-pageturn {
+  0%,100% { transform: scaleX(1); }
+  50%     { transform: scaleX(-0.2); }
+}
+@keyframes rp-bounce {
+  0%,20%  { transform: translateY(0) scale(1); }
+  40%     { transform: translateY(-14px) scale(1.15); }
+  60%     { transform: translateY(-6px) scale(1.05); }
+  80%     { transform: translateY(-10px) scale(1.1); }
+  100%    { transform: translateY(0) scale(1); }
+}
+@keyframes rp-glow-pulse {
+  0%,100% { opacity: 1; filter: drop-shadow(0 0 0px #CF7C07); }
+  50%     { opacity: 0.8; filter: drop-shadow(0 0 10px #CF7C07); }
+}
+
+:deep(.rp-orb) { animation: rp-rise 3.5s ease-out infinite; }
+:deep(.ro1) { animation-delay:0s;    animation-duration:3.2s; }
+:deep(.ro2) { animation-delay:0.45s; animation-duration:3.8s; }
+:deep(.ro3) { animation-delay:0.9s;  animation-duration:3.4s; }
+:deep(.ro4) { animation-delay:1.35s; animation-duration:4.0s; }
+:deep(.ro5) { animation-delay:1.8s;  animation-duration:3.6s; }
+:deep(.ro6) { animation-delay:0.25s; animation-duration:3.1s; }
+:deep(.ro7) { animation-delay:0.7s;  animation-duration:3.9s; }
+:deep(.ro8) { animation-delay:2.1s;  animation-duration:3.3s; }
+
+:deep(.rp-spark) { animation: rp-sparkle 4s ease-out infinite; }
+:deep(.rs1)  { animation-delay:0s;    animation-duration:3.8s; }
+:deep(.rs2)  { animation-delay:0.4s;  animation-duration:4.2s; }
+:deep(.rs3)  { animation-delay:0.8s;  animation-duration:3.6s; }
+:deep(.rs4)  { animation-delay:1.2s;  animation-duration:4.5s; }
+:deep(.rs5)  { animation-delay:1.6s;  animation-duration:3.9s; }
+:deep(.rs6)  { animation-delay:2.0s;  animation-duration:4.1s; }
+:deep(.rs7)  { animation-delay:0.3s;  animation-duration:3.7s; }
+:deep(.rs8)  { animation-delay:0.9s;  animation-duration:4.3s; }
+:deep(.rs9)  { animation-delay:1.5s;  animation-duration:3.5s; }
+:deep(.rs10) { animation-delay:2.2s;  animation-duration:4.0s; }
+
+:deep(.rp-twinkle) { animation: rp-twinkle 2.5s ease-in-out infinite; }
+:deep(.rt1)  { animation-delay:0s;   } :deep(.rt2)  { animation-delay:0.3s; }
+:deep(.rt3)  { animation-delay:0.6s; } :deep(.rt4)  { animation-delay:0.9s; }
+:deep(.rt5)  { animation-delay:1.2s; } :deep(.rt6)  { animation-delay:1.5s; }
+:deep(.rt7)  { animation-delay:1.8s; } :deep(.rt8)  { animation-delay:0.4s; }
+:deep(.rt9)  { animation-delay:0.7s; } :deep(.rt10) { animation-delay:1.0s; }
+
+:deep(.rp-float-book) { animation: rp-float 4s ease-in-out infinite; }
+:deep(.rfb1) { animation-delay:0s;   } :deep(.rfb2) { animation-delay:1.2s; }
+:deep(.rfb3) { animation-delay:2.4s; } :deep(.rfb4) { animation-delay:0.8s; }
+
+:deep(.rp-page-turn) { transform-origin: 5px center; animation: rp-pageturn 5s ease-in-out infinite; }
+:deep(.rp-bl) { animation: rp-bounce 1.6s cubic-bezier(0.36,0.07,0.19,0.97) infinite; }
+:deep(.rbl6), :deep(.rbl7), :deep(.rbl8) { animation: rp-bounce 1.6s cubic-bezier(0.36,0.07,0.19,0.97) infinite, rp-glow-pulse 2s ease-in-out infinite; }
+:deep(.rbl1) { animation-delay:0s;    } :deep(.rbl2) { animation-delay:0.12s; }
+:deep(.rbl3) { animation-delay:0.24s; } :deep(.rbl4) { animation-delay:0.36s; }
+:deep(.rbl5) { animation-delay:0.48s; } :deep(.rbl6) { animation-delay:0.60s; }
+:deep(.rbl7) { animation-delay:0.72s; } :deep(.rbl8) { animation-delay:0.84s; }
 </style>

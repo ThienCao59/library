@@ -4,20 +4,24 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@mdi/font": "^7.4.47",
     "ant-design-vue": "^4.2.6",
+    "apexcharts": "^5.14.0",
     "axios": "^1.16.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.32",
     "vue-router": "^5.0.7",
-    "vuetify": "^4.0.7"
+    "vue3-apexcharts": "^1.11.1",
+    "vuetify": "^4.0.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",

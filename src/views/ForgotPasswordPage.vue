@@ -59,7 +59,7 @@
 
           <!-- STEP 1: Enter email to receive token -->
           <a-form v-if="step === 1" :model="emailState" @finish="onRequestToken" layout="vertical">
-            <p class="subtitle-text mb-6">Nhập email đăng ký của bạn để nhận mã xác thực đặt lại mật khẩu thật gửi về hòm thư.</p>
+            <p class="subtitle-text mb-6">{{ t('auto.txt_3833739b') }}</p>
             
             <a-form-item
               label="Email Address"
@@ -74,36 +74,36 @@
 
             <a-form-item class="mt-8">
               <a-button type="primary" html-type="submit" class="btn-forgot-pill" :loading="loading">
-                Gửi Mã Xác Thực
+                {{ t('auto.txt_769e52d9') }}
               </a-button>
             </a-form-item>
           </a-form>
 
           <!-- STEP 2: Input token and new password -->
           <a-form v-else :model="resetState" @finish="onResetPassword" layout="vertical">
-            <p class="subtitle-text mb-4">Một mã xác thực đã được gửi tới <strong>{{ emailState.email }}</strong>. Vui lòng nhập mã và mật khẩu mới.</p>
+            <p class="subtitle-text mb-4">{{ t('auto.txt_98809dfd') }} <strong>{{ emailState.email }}</strong>{{ t('auto.txt_d47944cc') }}</p>
             
             <a-form-item
-              label="Mã Xác Thực (Token)"
+              :label="t('auto.txt_1b001c91')"
               name="token"
               :rules="[{ required: true, message: 'Vui lòng nhập mã xác thực từ email!' }]"
             >
-              <a-input v-model:value="resetState.token" placeholder="Dán mã xác thực tại đây" class="pill-input" />
+              <a-input v-model:value="resetState.token" :placeholder="t('auto.txt_f3786db5')" class="pill-input" />
             </a-form-item>
 
             <a-form-item
-              label="Mật Khẩu Mới"
+              :label="t('auto.txt_4129871f')"
               name="newPassword"
               :rules="[
                 { required: true, message: 'Vui lòng nhập mật khẩu mới!' },
                 { validator: validatePasswordStrength }
               ]"
             >
-              <a-input-password v-model:value="resetState.newPassword" placeholder="Tối thiểu 6 ký tự" class="pill-input" />
+              <a-input-password v-model:value="resetState.newPassword" :placeholder="t('auto.txt_159f5728')" class="pill-input" />
             </a-form-item>
 
             <a-form-item
-              label="Nhập Lại Mật Khẩu"
+              :label="t('auto.txt_46d5b92d')"
               name="confirmPassword"
               :rules="[
                 { required: true, message: 'Vui lòng nhập lại mật khẩu mới!' },
@@ -115,19 +115,19 @@
 
             <a-form-item class="mt-8">
               <a-button type="primary" html-type="submit" class="btn-forgot-pill" :loading="loading">
-                Cập Nhật Mật Khẩu
+                {{ t('auto.txt_691e5b59') }}
               </a-button>
             </a-form-item>
           </a-form>
 
           <div class="footer-links-forgot mt-6">
-            <span>Nhớ ra mật khẩu? </span>
-            <a href="#" class="btn-login-link" @click.prevent="$router.push('/login')">Đăng Nhập Ngay</a>
+            <span>{{ t('auto.txt_c23a8def') }} </span>
+            <a href="#" class="btn-login-link" @click.prevent="$router.push('/login')">{{ t('auto.txt_32b703d0') }}</a>
           </div>
 
           <div class="text-center mt-6">
             <a href="#" class="back-link-forgot" @click.prevent="$router.push('/')">
-              <v-icon icon="mdi-arrow-left" class="mr-1"></v-icon> Quay lại trang chủ
+              <v-icon icon="mdi-arrow-left" class="mr-1"></v-icon> {{ t('auto.txt_3cc53a09') }}
             </a>
           </div>
         </div>
@@ -137,10 +137,14 @@
 </template>
 
 <script setup lang="ts">
+import { useI18nStore } from '@/stores/i18nStore'
+const i18n = useI18nStore()
+const t = (key: string) => i18n.t(key)
+
 import { reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { apiClient } from '@/utils/apiClient'
 
 const router = useRouter()
 const loading = ref(false)
@@ -191,7 +195,7 @@ const validateConfirmPassword = (_rule: any, value: string) => {
 const onRequestToken = async () => {
   loading.value = true
   try {
-    const response = await axios.post('http://localhost:5208/api/Auth/forgot-password', {
+    const response = await apiClient.post('/api/identity/Auth/forgot-password', {
       Email: emailState.email
     })
     
@@ -210,7 +214,7 @@ const onRequestToken = async () => {
 const onResetPassword = async () => {
   loading.value = true
   try {
-    const response = await axios.post('http://localhost:5208/api/Auth/reset-password', {
+    const response = await apiClient.post('/api/identity/Auth/reset-password', {
       Email: emailState.email,
       Token: resetState.token,
       NewPassword: resetState.newPassword,
