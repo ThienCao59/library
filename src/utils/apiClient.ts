@@ -84,21 +84,16 @@ apiClient.interceptors.response.use(
       originalRequest?.url?.includes('/Auth/forgot-password') ||
       originalRequest?.url?.includes('/Auth/reset-password')
 
-    if (status === 401 && originalRequest && !isAuthEndpoint) {
-      if (!originalRequest._retry) {
-        originalRequest._retry = true
+    if (status === 401 && originalRequest && !originalRequest._retry && !isAuthEndpoint) {
+      originalRequest._retry = true
 
-        const newToken = await getRefreshPromise()
-        if (newToken) {
-          originalRequest.headers.Authorization = `Bearer ${newToken}`
-          return apiClient(originalRequest)
-        }
-
-        redirectToLogin()
-      } else {
-        // Token refreshed but downstream still rejects — session/JWT config mismatch
-        redirectToLogin()
+      const newToken = await getRefreshPromise()
+      if (newToken) {
+        originalRequest.headers.Authorization = `Bearer ${newToken}`
+        return apiClient(originalRequest)
       }
+
+      redirectToLogin()
     } else if (status === 403 && !isAuthEndpoint) {
       redirectToLogin()
     }

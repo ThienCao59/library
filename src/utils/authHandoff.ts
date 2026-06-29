@@ -6,17 +6,17 @@ export const N2_LIBRARIAN_URL =
 /** Trang xử lý mượn/trả của N2 (hash route) */
 export const N2_LIBRARIAN_LOANS_URL =
   import.meta.env.VITE_N2_LIBRARIAN_LOANS_URL ||
-  `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}#/loans`
+  `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}?embed=1#/loans`
 
 /** Trang doanh thu của N2 (hash route #/payments) */
 export const N2_LIBRARIAN_PAYMENTS_URL =
   import.meta.env.VITE_N2_LIBRARIAN_PAYMENTS_URL ||
-  `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}#/payments`
+  `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}?embed=1#/finance/revenue`
 
 /** Trang phí phạt của N2 (hash route #/fines) */
 export const N2_LIBRARIAN_FINES_URL =
   import.meta.env.VITE_N2_LIBRARIAN_FINES_URL ||
-  `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}#/fines`
+  `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}?embed=1#/fines`
 
 export const N2_READER_URL =
   import.meta.env.VITE_N2_READER_URL || 'http://163.223.210.87:5082/ui/reader/'

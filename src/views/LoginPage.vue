@@ -154,6 +154,12 @@
             <a-form-item>
               <a-button type="primary" html-type="submit" class="btn-login-pill" :loading="loading">{{ t('login.btn') }}</a-button>
             </a-form-item>
+            <div class="text-center mb-4">
+              <a-button class="btn-faceid-pill" @click="loginWithFaceId">
+                <v-icon icon="mdi-face-recognition" class="mr-2"></v-icon>
+                Đăng nhập bằng Face ID / Touch ID
+              </a-button>
+            </div>
           </a-form>
           <div class="footer-links-signin mt-6">
             <span>{{ t('login.no.account') }}</span>
@@ -223,6 +229,108 @@ const onFinish = async (values: any) => {
   } catch (error: any) {
     const errMessage = error.response?.data?.Message || error.response?.data?.message || t('login.error')
     message.error(errMessage)
+    loading.value = false
+  }
+}
+
+// Helper: convert base64url string to Uint8Array
+const base64urlToUint8Array = (base64url: string): Uint8Array<ArrayBuffer> => {
+  const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/')
+  const padded = base64.padEnd(base64.length + (4 - (base64.length % 4)) % 4, '=')
+  const binary = atob(padded)
+  const buf = new ArrayBuffer(binary.length)
+  const view = new Uint8Array(buf)
+  for (let i = 0; i < binary.length; i++) view[i] = binary.charCodeAt(i)
+  return view
+}
+
+// Helper: convert ArrayBuffer/Uint8Array to base64url string
+const bufferToBase64url = (buffer: ArrayBuffer | Uint8Array): string => {
+  const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer)
+  let binary = ''
+  bytes.forEach(b => binary += String.fromCharCode(b))
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+}
+
+const loginWithFaceId = async () => {
+  if (!formState.username) {
+    message.warning('Vui lòng nhập Username trước khi đăng nhập bằng Face ID')
+    return
+  }
+  if (!window.PublicKeyCredential) {
+    message.error('Trình duyệt không hỗ trợ Face ID / Touch ID (WebAuthn)')
+    return
+  }
+
+  loading.value = true
+  clearAuthSession()
+  try {
+    // 1. Lấy challenge từ backend
+    const optionsRes = await apiClient.post('/api/identity/Auth/Fido2/loginOptions', {
+      Username: formState.username
+    })
+    const options = optionsRes.data
+
+    // 2. Chuyển đổi challenge và allowCredentials sang đúng format cho browser
+    const publicKeyOptions: PublicKeyCredentialRequestOptions = {
+      challenge: base64urlToUint8Array(options.challenge),
+      timeout: options.timeout ?? 60000,
+      rpId: options.rpId,
+      userVerification: options.userVerification ?? 'preferred',
+      allowCredentials: (options.allowCredentials ?? []).map((c: any) => ({
+        id: base64urlToUint8Array(c.id),
+        type: c.type,
+        transports: c.transports
+      }))
+    }
+
+    // 3. Gọi WebAuthn thật — browser sẽ hiện popup Face ID / Touch ID / Windows Hello
+    const assertion = await navigator.credentials.get({ publicKey: publicKeyOptions }) as PublicKeyCredential
+    if (!assertion) throw new Error('Không nhận được phản hồi từ thiết bị xác thực')
+
+    const assertionResponse = assertion.response as AuthenticatorAssertionResponse
+
+    // 4. Gửi kết quả lên backend
+    const loginRes = await apiClient.post('/api/identity/Auth/Fido2/login', {
+      Username: formState.username,
+      AssertionResponse: {
+        id: assertion.id,
+        rawId: bufferToBase64url(assertion.rawId),
+        type: assertion.type,
+        response: {
+          authenticatorData: bufferToBase64url(assertionResponse.authenticatorData),
+          clientDataJSON: bufferToBase64url(assertionResponse.clientDataJSON),
+          signature: bufferToBase64url(assertionResponse.signature),
+          userHandle: assertionResponse.userHandle ? bufferToBase64url(assertionResponse.userHandle) : null
+        }
+      }
+    })
+
+    const data = loginRes.data
+    saveAuthSession(data)
+
+    const token = data.accessToken || data.AccessToken || ''
+    const payload = parseJwtPayload(token)
+    const roleClaim = payload?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload?.role || payload?.Role || ''
+    const userRole = Array.isArray(roleClaim) ? roleClaim[0] : roleClaim
+
+    message.success('Đăng nhập bằng Face ID thành công!')
+    const roleLower = String(userRole).toLowerCase()
+    if (roleLower === 'admin') {
+      window.location.assign('/dashboard')
+    } else if (roleLower === 'librarian') {
+      await redirectWithHandoffCode(N2_LIBRARIAN_URL)
+    } else {
+      await redirectWithHandoffCode(N2_READER_URL)
+    }
+  } catch (error: any) {
+    if (error.name === 'NotAllowedError') {
+      message.error('Face ID: Người dùng từ chối hoặc không xác thực được')
+    } else {
+      const errMessage = error.response?.data?.Message || error.message || t('login.error')
+      message.error('Face ID: ' + errMessage)
+    }
+  } finally {
     loading.value = false
   }
 }
