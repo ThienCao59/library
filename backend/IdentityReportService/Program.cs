@@ -36,10 +36,10 @@ builder.Services.AddMemoryCache();
 
 var fido2Config = new Fido2Configuration
 {
-    ServerDomain = builder.Configuration["fido2:serverDomain"],
-    ServerName = builder.Configuration["fido2:serverName"],
-    Origins = builder.Configuration.GetSection("fido2:origins").Get<HashSet<string>>(),
-    TimestampDriftTolerance = builder.Configuration.GetValue<int>("fido2:timestampDriftTolerance")
+    ServerDomain = builder.Configuration["fido2:serverDomain"] ?? "localhost",
+    ServerName = builder.Configuration["fido2:serverName"] ?? "SmartLib FIDO2",
+    Origins = builder.Configuration.GetSection("fido2:origins").Get<HashSet<string>>() ?? new HashSet<string>(),
+    TimestampDriftTolerance = builder.Configuration.GetValue<int>("fido2:timestampDriftTolerance", 300000)
 };
 builder.Services.AddSingleton(fido2Config);
 builder.Services.AddScoped<IFido2, Fido2>();

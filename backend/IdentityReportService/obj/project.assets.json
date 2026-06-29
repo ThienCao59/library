@@ -47,36 +47,59 @@
           "lib/net10.0/BCrypt-Net-Next.dll": {}
         }
       },
-      "Fido2/3.0.1": {
+      "Fido2/4.0.1": {
         "type": "package",
         "dependencies": {
-          "Fido2.Models": "3.0.1",
-          "NSec.Cryptography": "22.4.0",
-          "System.IdentityModel.Tokens.Jwt": "6.17.0"
+          "Fido2.Models": "4.0.1",
+          "Microsoft.IdentityModel.JsonWebTokens": "8.2.0",
+          "NSec.Cryptography": "25.4.0"
         },
         "compile": {
-          "lib/net6.0/Fido2.dll": {
-            "related": ".pdb"
+          "lib/net8.0/Fido2.dll": {
+            "related": ".pdb;.xml"
           }
         },
         "runtime": {
-          "lib/net6.0/Fido2.dll": {
-            "related": ".pdb"
+          "lib/net8.0/Fido2.dll": {
+            "related": ".pdb;.xml"
           }
         },
         "build": {
           "build/fido2.targets": {}
         }
       },
-      "Fido2.Models/3.0.1": {
+      "Fido2.AspNet/4.0.1": {
         "type": "package",
+        "dependencies": {
+          "Fido2": "4.0.1",
+          "Fido2.Models": "4.0.1"
+        },
         "compile": {
-          "lib/net6.0/Fido2.Models.dll": {
+          "lib/net8.0/Fido2.AspNet.dll": {
             "related": ".pdb;.xml"
           }
         },
         "runtime": {
-          "lib/net6.0/Fido2.Models.dll": {
+          "lib/net8.0/Fido2.AspNet.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Fido2.Models/4.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl.Memory": "9.0.14"
+        },
+        "compile": {
+          "lib/net8.0/Fido2.Models.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Fido2.Models.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -94,9 +117,13 @@
           }
         }
       },
-      "libsodium/1.0.18.2": {
+      "libsodium/1.0.20.1": {
         "type": "package",
         "runtimeTargets": {
+          "runtimes/ios-arm64/native/libsodium.a": {
+            "assetType": "native",
+            "rid": "ios-arm64"
+          },
           "runtimes/linux-arm/native/libsodium.so": {
             "assetType": "native",
             "rid": "linux-arm"
@@ -104,6 +131,14 @@
           "runtimes/linux-arm64/native/libsodium.so": {
             "assetType": "native",
             "rid": "linux-arm64"
+          },
+          "runtimes/linux-musl-arm/native/libsodium.so": {
+            "assetType": "native",
+            "rid": "linux-musl-arm"
+          },
+          "runtimes/linux-musl-arm64/native/libsodium.so": {
+            "assetType": "native",
+            "rid": "linux-musl-arm64"
           },
           "runtimes/linux-musl-x64/native/libsodium.so": {
             "assetType": "native",
@@ -113,6 +148,14 @@
             "assetType": "native",
             "rid": "linux-x64"
           },
+          "runtimes/maccatalyst-arm64/native/libsodium.a": {
+            "assetType": "native",
+            "rid": "maccatalyst-arm64"
+          },
+          "runtimes/maccatalyst-x64/native/libsodium.a": {
+            "assetType": "native",
+            "rid": "maccatalyst-x64"
+          },
           "runtimes/osx-arm64/native/libsodium.dylib": {
             "assetType": "native",
             "rid": "osx-arm64"
@@ -120,6 +163,14 @@
           "runtimes/osx-x64/native/libsodium.dylib": {
             "assetType": "native",
             "rid": "osx-x64"
+          },
+          "runtimes/tvos-arm64/native/libsodium.a": {
+            "assetType": "native",
+            "rid": "tvos-arm64"
+          },
+          "runtimes/win-arm64/native/libsodium.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
           },
           "runtimes/win-x64/native/libsodium.dll": {
             "assetType": "native",
@@ -239,6 +290,38 @@
         },
         "build": {
           "buildTransitive/net8.0/_._": {}
+        }
+      },
+      "Microsoft.Bcl.Memory/9.0.14": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Microsoft.Bcl.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Bcl.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        }
+      },
+      "Microsoft.Bcl.TimeProvider/8.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Microsoft.Bcl.TimeProvider.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Bcl.TimeProvider.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
         }
       },
       "Microsoft.Build.Framework/18.0.2": {
@@ -827,7 +910,7 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Abstractions/8.0.1": {
+      "Microsoft.IdentityModel.Abstractions/8.2.0": {
         "type": "package",
         "compile": {
           "lib/net9.0/Microsoft.IdentityModel.Abstractions.dll": {
@@ -840,10 +923,11 @@
           }
         }
       },
-      "Microsoft.IdentityModel.JsonWebTokens/8.0.1": {
+      "Microsoft.IdentityModel.JsonWebTokens/8.2.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "8.0.1"
+          "Microsoft.Bcl.TimeProvider": "8.0.1",
+          "Microsoft.IdentityModel.Tokens": "8.2.0"
         },
         "compile": {
           "lib/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
@@ -856,10 +940,10 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Logging/8.0.1": {
+      "Microsoft.IdentityModel.Logging/8.2.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "8.0.1"
+          "Microsoft.IdentityModel.Abstractions": "8.2.0"
         },
         "compile": {
           "lib/net9.0/Microsoft.IdentityModel.Logging.dll": {
@@ -905,10 +989,11 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Tokens/8.0.1": {
+      "Microsoft.IdentityModel.Tokens/8.2.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Logging": "8.0.1"
+          "Microsoft.Bcl.TimeProvider": "8.0.1",
+          "Microsoft.IdentityModel.Logging": "8.2.0"
         },
         "compile": {
           "lib/net9.0/Microsoft.IdentityModel.Tokens.dll": {
@@ -988,16 +1073,16 @@
           }
         }
       },
-      "NSec.Cryptography/22.4.0": {
+      "NSec.Cryptography/25.4.0": {
         "type": "package",
         "dependencies": {
-          "libsodium": "[1.0.18.2, 1.0.19)"
+          "libsodium": "[1.0.20.1, 1.0.21)"
         },
         "compile": {
-          "lib/net5.0/NSec.Cryptography.dll": {}
+          "lib/net8.0/NSec.Cryptography.dll": {}
         },
         "runtime": {
-          "lib/net5.0/NSec.Cryptography.dll": {}
+          "lib/net8.0/NSec.Cryptography.dll": {}
         }
       },
       "RabbitMQ.Client/6.8.1": {
@@ -1534,32 +1619,47 @@
         "readme.md"
       ]
     },
-    "Fido2/3.0.1": {
-      "sha512": "S0Bz1vfcKlO4Jase3AWp5XnQ746psf4oGx5kL+D2A10j1SsjoAOAIIpanSwfi0cEepDHgk1bClcOKY5TjOzGdA==",
+    "Fido2/4.0.1": {
+      "sha512": "k/+JLt4J4k4zccYwtV1yiRMZEphwj+GacQeVj1p7foEp787a8vJFkHtLnyzSRsnbf9JDYEh7SF8VBWlTTbdsdQ==",
       "type": "package",
-      "path": "fido2/3.0.1",
+      "path": "fido2/4.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "build/fido2.targets",
-        "fido2.3.0.1.nupkg.sha512",
+        "fido2.4.0.1.nupkg.sha512",
         "fido2.nuspec",
-        "lib/net6.0/Fido2.dll",
-        "lib/net6.0/Fido2.pdb"
+        "lib/net8.0/Fido2.dll",
+        "lib/net8.0/Fido2.pdb",
+        "lib/net8.0/Fido2.xml"
       ]
     },
-    "Fido2.Models/3.0.1": {
-      "sha512": "mgjcuGETuYSCUEaZG+jQeeuuEMkDLc4GDJHBvKDdOz6oSOWp5adPdWP4btZx7Pi+9fu4szN3JIjJmby67MaILw==",
+    "Fido2.AspNet/4.0.1": {
+      "sha512": "KupbLzUjy40wgQIW21sTl+KmlnJVdFqJqF7bGFhl/g2BzayagYvEl6yllIInZWsVu8AGHAO33OmeO8JZVH+z9w==",
       "type": "package",
-      "path": "fido2.models/3.0.1",
+      "path": "fido2.aspnet/4.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "fido2.models.3.0.1.nupkg.sha512",
+        "fido2.aspnet.4.0.1.nupkg.sha512",
+        "fido2.aspnet.nuspec",
+        "lib/net8.0/Fido2.AspNet.dll",
+        "lib/net8.0/Fido2.AspNet.pdb",
+        "lib/net8.0/Fido2.AspNet.xml"
+      ]
+    },
+    "Fido2.Models/4.0.1": {
+      "sha512": "SepPhuYlDEWFwObg39xea9e5Ck5a7qpUP0vjIWzkEOCXDWsKQaW9sdN+m+h9phiCzb0r3w1yauypnHN11CozIw==",
+      "type": "package",
+      "path": "fido2.models/4.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "fido2.models.4.0.1.nupkg.sha512",
         "fido2.models.nuspec",
-        "lib/net6.0/Fido2.Models.dll",
-        "lib/net6.0/Fido2.Models.pdb",
-        "lib/net6.0/Fido2.Models.xml"
+        "lib/net8.0/Fido2.Models.dll",
+        "lib/net8.0/Fido2.Models.pdb",
+        "lib/net8.0/Fido2.Models.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -1580,24 +1680,31 @@
         "logo.png"
       ]
     },
-    "libsodium/1.0.18.2": {
-      "sha512": "flArHoVdscSzyV8ZdPV+bqqY2TTFlaN+xZf/vIqsmHI51KVcD/mOdUPaK3n/k/wGKz8dppiktXUqSmf3AXFgig==",
+    "libsodium/1.0.20.1": {
+      "sha512": "pkiceEqJDQFHjbga3k/oPfTVX9g+GKJZ1VrkuiLhaymt9YNw1Dr7cX9hNuZuNaWcr9WD0moW55k4pMwzQ7JaZQ==",
       "type": "package",
-      "path": "libsodium/1.0.18.2",
+      "path": "libsodium/1.0.20.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "AUTHORS",
         "ChangeLog",
         "LICENSE",
-        "libsodium.1.0.18.2.nupkg.sha512",
+        "libsodium.1.0.20.1.nupkg.sha512",
         "libsodium.nuspec",
+        "runtimes/ios-arm64/native/libsodium.a",
         "runtimes/linux-arm/native/libsodium.so",
         "runtimes/linux-arm64/native/libsodium.so",
+        "runtimes/linux-musl-arm/native/libsodium.so",
+        "runtimes/linux-musl-arm64/native/libsodium.so",
         "runtimes/linux-musl-x64/native/libsodium.so",
         "runtimes/linux-x64/native/libsodium.so",
+        "runtimes/maccatalyst-arm64/native/libsodium.a",
+        "runtimes/maccatalyst-x64/native/libsodium.a",
         "runtimes/osx-arm64/native/libsodium.dylib",
         "runtimes/osx-x64/native/libsodium.dylib",
+        "runtimes/tvos-arm64/native/libsodium.a",
+        "runtimes/win-arm64/native/libsodium.dll",
         "runtimes/win-x64/native/libsodium.dll",
         "runtimes/win-x86/native/libsodium.dll"
       ]
@@ -1746,6 +1853,62 @@
         "lib/netstandard2.0/Microsoft.Bcl.Cryptography.xml",
         "microsoft.bcl.cryptography.9.0.4.nupkg.sha512",
         "microsoft.bcl.cryptography.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
+    "Microsoft.Bcl.Memory/9.0.14": {
+      "sha512": "laQCcjTM2FnbyznkAu9hwBuQh3z2/OtJKwjGkJOUevylFpFXZIUVq/+MU2jM0HQm1n5wsjjwtLIDOiWJ6Nai3A==",
+      "type": "package",
+      "path": "microsoft.bcl.memory/9.0.14",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Bcl.Memory.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Bcl.Memory.targets",
+        "lib/net462/Microsoft.Bcl.Memory.dll",
+        "lib/net462/Microsoft.Bcl.Memory.xml",
+        "lib/net8.0/Microsoft.Bcl.Memory.dll",
+        "lib/net8.0/Microsoft.Bcl.Memory.xml",
+        "lib/net9.0/Microsoft.Bcl.Memory.dll",
+        "lib/net9.0/Microsoft.Bcl.Memory.xml",
+        "lib/netstandard2.0/Microsoft.Bcl.Memory.dll",
+        "lib/netstandard2.0/Microsoft.Bcl.Memory.xml",
+        "lib/netstandard2.1/Microsoft.Bcl.Memory.dll",
+        "lib/netstandard2.1/Microsoft.Bcl.Memory.xml",
+        "microsoft.bcl.memory.9.0.14.nupkg.sha512",
+        "microsoft.bcl.memory.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
+    "Microsoft.Bcl.TimeProvider/8.0.1": {
+      "sha512": "C7kWHJnMRY7EvJev2S8+yJHZ1y7A4ZlLbA4NE+O23BDIAN5mHeqND1m+SKv1ChRS5YlCDW7yAMUe7lttRsJaAA==",
+      "type": "package",
+      "path": "microsoft.bcl.timeprovider/8.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Bcl.TimeProvider.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Bcl.TimeProvider.targets",
+        "lib/net462/Microsoft.Bcl.TimeProvider.dll",
+        "lib/net462/Microsoft.Bcl.TimeProvider.xml",
+        "lib/net8.0/Microsoft.Bcl.TimeProvider.dll",
+        "lib/net8.0/Microsoft.Bcl.TimeProvider.xml",
+        "lib/netstandard2.0/Microsoft.Bcl.TimeProvider.dll",
+        "lib/netstandard2.0/Microsoft.Bcl.TimeProvider.xml",
+        "microsoft.bcl.timeprovider.8.0.1.nupkg.sha512",
+        "microsoft.bcl.timeprovider.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
@@ -3337,13 +3500,14 @@
         "microsoft.identity.client.extensions.msal.nuspec"
       ]
     },
-    "Microsoft.IdentityModel.Abstractions/8.0.1": {
-      "sha512": "OtlIWcyX01olfdevPKZdIPfBEvbcioDyBiE/Z2lHsopsMD7twcKtlN9kMevHmI5IIPhFpfwCIiR6qHQz1WHUIw==",
+    "Microsoft.IdentityModel.Abstractions/8.2.0": {
+      "sha512": "27ClfnelIu92kLGOaz0vjdXR1Jv7hAdLffxxNgR8T0+IMWmxeVyO3cU8oohmuTrWUFOfd2tsSGaRNewnuClIZw==",
       "type": "package",
-      "path": "microsoft.identitymodel.abstractions/8.0.1",
+      "path": "microsoft.identitymodel.abstractions/8.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "README.md",
         "lib/net462/Microsoft.IdentityModel.Abstractions.dll",
         "lib/net462/Microsoft.IdentityModel.Abstractions.xml",
         "lib/net472/Microsoft.IdentityModel.Abstractions.dll",
@@ -3356,17 +3520,18 @@
         "lib/net9.0/Microsoft.IdentityModel.Abstractions.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.xml",
-        "microsoft.identitymodel.abstractions.8.0.1.nupkg.sha512",
+        "microsoft.identitymodel.abstractions.8.2.0.nupkg.sha512",
         "microsoft.identitymodel.abstractions.nuspec"
       ]
     },
-    "Microsoft.IdentityModel.JsonWebTokens/8.0.1": {
-      "sha512": "s6++gF9x0rQApQzOBbSyp4jUaAlwm+DroKfL8gdOHxs83k8SJfUXhuc46rDB3rNXBQ1MVRxqKUrqFhO/M0E97g==",
+    "Microsoft.IdentityModel.JsonWebTokens/8.2.0": {
+      "sha512": "/DAx+9HeqfkH/PccwHx7cUtQe9fYM6AxEmTla8WXUT+w+mapKLnigWmdKtF55hNvxiSnmGhSSCcG7XrvkpGKFA==",
       "type": "package",
-      "path": "microsoft.identitymodel.jsonwebtokens/8.0.1",
+      "path": "microsoft.identitymodel.jsonwebtokens/8.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "README.md",
         "lib/net462/Microsoft.IdentityModel.JsonWebTokens.dll",
         "lib/net462/Microsoft.IdentityModel.JsonWebTokens.xml",
         "lib/net472/Microsoft.IdentityModel.JsonWebTokens.dll",
@@ -3379,17 +3544,18 @@
         "lib/net9.0/Microsoft.IdentityModel.JsonWebTokens.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.JsonWebTokens.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.JsonWebTokens.xml",
-        "microsoft.identitymodel.jsonwebtokens.8.0.1.nupkg.sha512",
+        "microsoft.identitymodel.jsonwebtokens.8.2.0.nupkg.sha512",
         "microsoft.identitymodel.jsonwebtokens.nuspec"
       ]
     },
-    "Microsoft.IdentityModel.Logging/8.0.1": {
-      "sha512": "UCPF2exZqBXe7v/6sGNiM6zCQOUXXQ9+v5VTb9gPB8ZSUPnX53BxlN78v2jsbIvK9Dq4GovQxo23x8JgWvm/Qg==",
+    "Microsoft.IdentityModel.Logging/8.2.0": {
+      "sha512": "mZsjOZlbmCZfM71y8Fyo+D5UJ1RZFvmKXkxTfE2llQ0/CrfEeWmbpoew51w++EWs+G8B/peZqR1DQtbX3bB6Fg==",
       "type": "package",
-      "path": "microsoft.identitymodel.logging/8.0.1",
+      "path": "microsoft.identitymodel.logging/8.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "README.md",
         "lib/net462/Microsoft.IdentityModel.Logging.dll",
         "lib/net462/Microsoft.IdentityModel.Logging.xml",
         "lib/net472/Microsoft.IdentityModel.Logging.dll",
@@ -3402,7 +3568,7 @@
         "lib/net9.0/Microsoft.IdentityModel.Logging.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.Logging.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.Logging.xml",
-        "microsoft.identitymodel.logging.8.0.1.nupkg.sha512",
+        "microsoft.identitymodel.logging.8.2.0.nupkg.sha512",
         "microsoft.identitymodel.logging.nuspec"
       ]
     },
@@ -3452,13 +3618,14 @@
         "microsoft.identitymodel.protocols.openidconnect.nuspec"
       ]
     },
-    "Microsoft.IdentityModel.Tokens/8.0.1": {
-      "sha512": "kDimB6Dkd3nkW2oZPDkMkVHfQt3IDqO5gL0oa8WVy3OP4uE8Ij+8TXnqg9TOd9ufjsY3IDiGz7pCUbnfL18tjg==",
+    "Microsoft.IdentityModel.Tokens/8.2.0": {
+      "sha512": "/I+6D3SwW8hQh5wznGzQCrS4L5y5Re/0AEKKfXXAduWzz4WKqJzY8RmjwZ6W66bIFUhPrqOy6zsLKPik4Ppnbw==",
       "type": "package",
-      "path": "microsoft.identitymodel.tokens/8.0.1",
+      "path": "microsoft.identitymodel.tokens/8.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "README.md",
         "lib/net462/Microsoft.IdentityModel.Tokens.dll",
         "lib/net462/Microsoft.IdentityModel.Tokens.xml",
         "lib/net472/Microsoft.IdentityModel.Tokens.dll",
@@ -3471,7 +3638,7 @@
         "lib/net9.0/Microsoft.IdentityModel.Tokens.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.xml",
-        "microsoft.identitymodel.tokens.8.0.1.nupkg.sha512",
+        "microsoft.identitymodel.tokens.8.2.0.nupkg.sha512",
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
@@ -3573,18 +3740,21 @@
         "packageIcon.png"
       ]
     },
-    "NSec.Cryptography/22.4.0": {
-      "sha512": "lEntcPYd7h3aZ8xxi/y/4TML7o8w0GEGqd+w4L1omqFLbdCBmhxJAeO2YBmv/fXbJKgKCQLm7+TD4bR605PEUQ==",
+    "NSec.Cryptography/25.4.0": {
+      "sha512": "Z3wPpG0xefMLmhn9T+Ka/EzAmMQPT0THL/5E4lf9cXI/N9rbGH0G23ZFpRcPnD0ast2k7ieG6QSVNIjmfPCXBQ==",
       "type": "package",
-      "path": "nsec.cryptography/22.4.0",
+      "path": "nsec.cryptography/25.4.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
         "NOTICE",
-        "lib/net5.0/NSec.Cryptography.dll",
-        "lib/netstandard2.1/NSec.Cryptography.dll",
-        "nsec.cryptography.22.4.0.nupkg.sha512",
+        "README.md",
+        "lib/net8.0-ios18.0/NSec.Cryptography.dll",
+        "lib/net8.0-maccatalyst18.0/NSec.Cryptography.dll",
+        "lib/net8.0-tvos18.0/NSec.Cryptography.dll",
+        "lib/net8.0/NSec.Cryptography.dll",
+        "nsec.cryptography.25.4.0.nupkg.sha512",
         "nsec.cryptography.nuspec",
         "nsec.png"
       ]
@@ -4284,7 +4454,8 @@
   "projectFileDependencyGroups": {
     "net10.0": [
       "BCrypt.Net-Next >= 4.2.0",
-      "Fido2 >= 3.0.1",
+      "Fido2 >= 4.0.1",
+      "Fido2.AspNet >= 4.0.1",
       "MassTransit.RabbitMQ >= 8.3.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 10.0.8",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 10.0.8",
@@ -4347,7 +4518,11 @@
           },
           "Fido2": {
             "target": "Package",
-            "version": "[3.0.1, )"
+            "version": "[4.0.1, )"
+          },
+          "Fido2.AspNet": {
+            "target": "Package",
+            "version": "[4.0.1, )"
           },
           "MassTransit.RabbitMQ": {
             "target": "Package",

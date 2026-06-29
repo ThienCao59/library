@@ -52,7 +52,11 @@
             },
             "Fido2": {
               "target": "Package",
-              "version": "[3.0.1, )"
+              "version": "[4.0.1, )"
+            },
+            "Fido2.AspNet": {
+              "target": "Package",
+              "version": "[4.0.1, )"
             },
             "MassTransit.RabbitMQ": {
               "target": "Package",
