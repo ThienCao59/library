@@ -61,6 +61,9 @@
             <a class="menu-item" :class="{ active: currentTab === 'cards-list' }" @click="switchTab('cards-list')">
               <span class="icon"><IdcardOutlined /></span> {{ t('sidebar.cards') }}
             </a>
+            <a class="menu-item" :class="{ active: currentTab === 'reviews' }" @click="switchTab('reviews')">
+              <span class="icon"><StarOutlined /></span> Quản lý đánh giá
+            </a>
             <div class="menu-submenu">
               <a
                 class="menu-item submenu-toggle"
@@ -542,7 +545,7 @@
                 :row-key="(record: any) => record.Id || record.id"
                 :row-selection="readerRowSelection"
                 :scroll="{ x: 1200 }"
-                :pagination="{ pageSize: 15, showSizeChanger: true, pageSizeOptions: ['10', '15', '20', '50'] }"
+                :pagination="{ current: readersCurrentPage, pageSize: readersPageSize, showSizeChanger: true, pageSizeOptions: ['10', '15', '20', '50'], onChange: onReadersPageChange }"
                 class="ant-table-striped"
               >
                 <template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
@@ -576,7 +579,7 @@
                 </template>
                 <template #bodyCell="{ column, record, index }">
                   <template v-if="column.key === 'stt'">
-                    <span style="font-weight: 600; color: #6C7A78;">{{ index + 1 }}</span>
+                    <span style="font-weight: 600; color: #6C7A78;">{{ (readersCurrentPage - 1) * readersPageSize + index + 1 }}</span>
                   </template>
                   <template v-else-if="column.key === 'fullName'">
                     <div style="display:flex; align-items:center; gap:8px;">
@@ -948,6 +951,22 @@
             <div v-else class="books-iframe-loading">
               <LoadingOutlined spin style="font-size: 28px; margin-right: 8px;" />
               {{ t('auto.txt_b25937fb') }}
+            </div>
+          </div>
+        </template>
+
+        <!-- ==================== REVIEWS TAB ==================== -->
+        <template v-if="currentRole === 'Admin' && currentTab === 'reviews'">
+          <div class="tab-content animate-fade-in" style="padding: 0; height: calc(100vh - 80px);">
+            <iframe
+              v-if="reviewsIframeSrc"
+              :src="reviewsIframeSrc"
+              style="width: 100%; height: 100%; border: none; border-radius: 12px;"
+              title="Quản lý đánh giá"
+            />
+            <div v-else class="books-iframe-loading">
+              <LoadingOutlined spin style="font-size: 28px; margin-right: 8px;" />
+              Đang tải dữ liệu...
             </div>
           </div>
         </template>
@@ -1570,10 +1589,10 @@ import { apiClient, logout } from '@/utils/apiClient'
 import { useLibraryStore } from '@/stores/libraryStore'
 import { useI18nStore } from '@/stores/i18nStore'
 import { getAccessToken } from '@/utils/auth'
-import { N1_BOOKS_URL, N2_LIBRARIAN_LOANS_URL, N2_LIBRARIAN_PAYMENTS_URL, N2_LIBRARIAN_FINES_URL, buildHandoffUrl, createAuthHandoffCode } from '@/utils/authHandoff'
+import { N1_BOOKS_URL, N2_LIBRARIAN_LOANS_URL, N2_LIBRARIAN_PAYMENTS_URL, N2_LIBRARIAN_FINES_URL, N2_LIBRARIAN_REVIEWS_URL, buildHandoffUrl, createAuthHandoffCode } from '@/utils/authHandoff'
 import { exportReadersToXlsx, importXlsxFile, normalizeExcelRows } from '@/utils/excelHelper.js'
 import { formatVnDateTime, formatVnDate, parseUtcDate } from '@/utils/dateTime'
-import { LockOutlined, UserOutlined, DashboardOutlined, BookOutlined, SettingOutlined, TeamOutlined, IdcardOutlined, SyncOutlined, SearchOutlined, InboxOutlined, LogoutOutlined, BulbOutlined, BellOutlined, ReadOutlined, FrownOutlined, EyeOutlined, UnlockOutlined, StopOutlined, CheckCircleOutlined, ArrowRightOutlined, ArrowLeftOutlined, LoadingOutlined, LinkOutlined, SaveOutlined, CheckOutlined, CloseOutlined, WifiOutlined, FileExcelOutlined, DownloadOutlined, EditOutlined, UploadOutlined, PlusOutlined, DeleteOutlined, LoginOutlined, DownOutlined, HistoryOutlined, WarningOutlined, ExclamationCircleOutlined, DollarOutlined, BarChartOutlined, AlertOutlined, BankOutlined, CloudUploadOutlined, DatabaseOutlined, GlobalOutlined } from '@ant-design/icons-vue';
+import { StarOutlined, LockOutlined, UserOutlined, DashboardOutlined, BookOutlined, SettingOutlined, TeamOutlined, IdcardOutlined, SyncOutlined, SearchOutlined, InboxOutlined, LogoutOutlined, BulbOutlined, BellOutlined, ReadOutlined, FrownOutlined, EyeOutlined, UnlockOutlined, StopOutlined, CheckCircleOutlined, ArrowRightOutlined, ArrowLeftOutlined, LoadingOutlined, LinkOutlined, SaveOutlined, CheckOutlined, CloseOutlined, WifiOutlined, FileExcelOutlined, DownloadOutlined, EditOutlined, UploadOutlined, PlusOutlined, DeleteOutlined, LoginOutlined, DownOutlined, HistoryOutlined, WarningOutlined, ExclamationCircleOutlined, DollarOutlined, BarChartOutlined, AlertOutlined, BankOutlined, CloudUploadOutlined, DatabaseOutlined, GlobalOutlined } from '@ant-design/icons-vue';
 
 const router = useRouter()
 const i18n = useI18nStore()
@@ -1592,6 +1611,7 @@ const booksIframeSrc = ref('')
 const loansIframeSrc = ref('')
 const paymentsIframeSrc = ref('')
 const finesIframeSrc = ref('')
+const reviewsIframeSrc = ref('')
 
 async function loadBooksIframe() {
   booksIframeSrc.value = ''
@@ -1630,6 +1650,16 @@ async function loadFinesIframe() {
     finesIframeSrc.value = buildHandoffUrl(N2_LIBRARIAN_FINES_URL, code)
   } catch {
     message.error('Không thể tải giao diện quản lý phí phạt. Vui lòng thử lại.')
+  }
+}
+
+async function loadReviewsIframe() {
+  reviewsIframeSrc.value = ''
+  try {
+    const code = await createAuthHandoffCode()
+    reviewsIframeSrc.value = buildHandoffUrl(N2_LIBRARIAN_REVIEWS_URL, code)
+  } catch {
+    message.error('Không thể tải giao diện quản lý đánh giá. Vui lòng thử lại.')
   }
 }
 
@@ -2722,6 +2752,8 @@ const switchTab = (tabName: string) => {
     loadBooksIframe()
   } else if (tabName === 'rules') {
     loadLoansIframe()
+  } else if (tabName === 'reviews') {
+    loadReviewsIframe()
   }
 }
 
@@ -3392,6 +3424,11 @@ const readersCurrentPage = ref(1)
 const readersPageSize = ref(15)
 const cardsCurrentPage = ref(1)
 const cardsPageSize = ref(9)
+
+const onReadersPageChange = (page: number, size: number) => {
+  readersCurrentPage.value = page
+  readersPageSize.value = size
+}
 
 // Readers columns — AntD customFilterDropdown (icon + search input + Search/Reset/close)
 const readersColumns = [

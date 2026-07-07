@@ -10,6 +10,7 @@ using IdentityReportService.DTOs;
 using IdentityReportService.Models;
 using IdentityReportService.Services;
 using IdentityReportService.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityReportService.Controllers
 {
@@ -23,6 +24,7 @@ namespace IdentityReportService.Controllers
         private readonly AppDbContext _context;
         private readonly IEmailService _emailService;
         private readonly IEventLogService _eventLogService;
+        private readonly IOtpService _otpService;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
@@ -30,7 +32,8 @@ namespace IdentityReportService.Controllers
             IAuthHandoffService authHandoffService,
             AppDbContext context,
             IEmailService emailService,
-            IEventLogService eventLogService)
+            IEventLogService eventLogService,
+            IOtpService otpService)
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
@@ -38,6 +41,7 @@ namespace IdentityReportService.Controllers
             _context = context;
             _emailService = emailService;
             _eventLogService = eventLogService;
+            _otpService = otpService;
         }
 
         [AllowAnonymous]
@@ -122,60 +126,68 @@ namespace IdentityReportService.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Support login by username OR phone number
-            ApplicationUser? user = await _userManager.FindByNameAsync(dto.Username);
-            
-            // If not found by username, try to find by phone number (10-digit pattern)
-            if (user == null && dto.Username.Length >= 9 && dto.Username.All(char.IsDigit))
+            try
             {
-                user = _context.Users.FirstOrDefault(u => u.PhoneNumber == dto.Username);
+                // Support login by username OR phone number
+                ApplicationUser? user = await _userManager.FindByNameAsync(dto.Username);
+                
+                // If not found by username, try to find by phone number (10-digit pattern)
+                if (user == null && dto.Username.Length >= 9 && dto.Username.All(char.IsDigit))
+                {
+                    user = await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == dto.Username);
+                }
+
+                if (user == null || !user.IsActive)
+                    return Unauthorized(new { Message = "Invalid username/phone or password, or account is disabled." });
+
+                var passwordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
+                if (!passwordValid)
+                    return Unauthorized(new { Message = "Invalid username or password." });
+
+                var roles = await _userManager.GetRolesAsync(user);
+                
+                // If Identity roles is empty, fallback to the string Role property
+                if (roles.Count == 0)
+                {
+                    roles = new List<string> { user.Role };
+                }
+
+                // Fetch CardNumber before generating token so it can be embedded as a claim
+                var card = await _context.LibraryCards.FirstOrDefaultAsync(c => c.UserId == user.Id);
+
+                var accessToken = _jwtTokenService.GenerateAccessToken(user, roles, card?.CardNumber);
+                var refreshToken = _jwtTokenService.GenerateRefreshToken();
+
+                user.PreviousRefreshToken = null;
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                user.UpdatedAt = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+
+                await _eventLogService.LogAsync("user.login", new
+                {
+                    userId = user.Id,
+                    username = user.UserName,
+                    fullName = user.FullName,
+                    role = user.Role
+                });
+
+                return Ok(new AuthResponseDto
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    Username = user.UserName!,
+                    Email = user.Email!,
+                    Role = user.Role,
+                    UserId = user.Id,
+                    CardNumber = card?.CardNumber
+                });
             }
-
-            if (user == null || !user.IsActive)
-                return Unauthorized(new { Message = "Invalid username/phone or password, or account is disabled." });
-
-            var passwordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
-            if (!passwordValid)
-                return Unauthorized(new { Message = "Invalid username or password." });
-
-            var roles = await _userManager.GetRolesAsync(user);
-            
-            // If Identity roles is empty, fallback to the string Role property
-            if (roles.Count == 0)
+            catch (Exception ex)
             {
-                roles = new List<string> { user.Role };
+                Console.WriteLine($"[AUTH] Login exception: {ex}");
+                return StatusCode(500, new { Message = $"Chi tiết lỗi: {ex.Message} | StackTrace: {ex.StackTrace}" });
             }
-
-            // Fetch CardNumber before generating token so it can be embedded as a claim
-            var card = _context.LibraryCards.FirstOrDefault(c => c.UserId == user.Id);
-
-            var accessToken = _jwtTokenService.GenerateAccessToken(user, roles, card?.CardNumber);
-            var refreshToken = _jwtTokenService.GenerateRefreshToken();
-
-            user.PreviousRefreshToken = null;
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-            user.UpdatedAt = DateTime.UtcNow;
-            await _userManager.UpdateAsync(user);
-
-            await _eventLogService.LogAsync("user.login", new
-            {
-                userId = user.Id,
-                username = user.UserName,
-                fullName = user.FullName,
-                role = user.Role
-            });
-
-            return Ok(new AuthResponseDto
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-                Username = user.UserName!,
-                Email = user.Email!,
-                Role = user.Role,
-                UserId = user.Id,
-                CardNumber = card?.CardNumber
-            });
         }
 
         [AllowAnonymous]
@@ -346,7 +358,7 @@ namespace IdentityReportService.Controllers
             if (string.IsNullOrEmpty(accessToken))
                 return Unauthorized();
 
-            var card = _context.LibraryCards.FirstOrDefault(c => c.UserId == user.Id);
+            var card = await _context.LibraryCards.FirstOrDefaultAsync(c => c.UserId == user.Id);
 
             var handoff = _authHandoffService.CreateHandoffCode(new AuthHandoffPayload
             {
@@ -418,6 +430,134 @@ namespace IdentityReportService.Controllers
                 return Unauthorized(new { Message = "Account locked or disabled." });
 
             return Ok();
+        }
+
+        // =====================================================================
+        // QR CODE LOGIN — Bước 1: Quét QR → gửi OTP về email
+        // =====================================================================
+        [AllowAnonymous]
+        [EnableRateLimiting("auth")]
+        [HttpPost("request-otp")]
+        public async Task<IActionResult> RequestOtp([FromBody] RequestOtpDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var card = await _context.LibraryCards.FirstOrDefaultAsync(c => c.CardNumber == dto.CardNumber);
+                if (card == null)
+                    return BadRequest(new { Message = "Mã thẻ không tồn tại trong hệ thống." });
+
+                var user = await _userManager.FindByIdAsync(card.UserId);
+                if (user == null || !user.IsActive)
+                    return BadRequest(new { Message = "Tài khoản không tồn tại hoặc đã bị khóa." });
+
+                if (string.IsNullOrEmpty(user.Email))
+                    return BadRequest(new { Message = "Tài khoản chưa có email để nhận OTP." });
+
+                var otp = _otpService.GenerateOtp(user.Id);
+
+                var htmlMessage = $@"
+                    <div style='font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:24px;border:1px solid #e0e0e0;border-radius:12px;'>
+                        <h2 style='color:#1E5652;text-align:center;'>Mã OTP Đăng Nhập</h2>
+                        <p style='color:#555;text-align:center;'>Xin chào <strong>{user.FullName ?? user.UserName}</strong>, đây là mã OTP của bạn:</p>
+                        <div style='background:#f0faf5;border:2px dashed #1E5652;border-radius:10px;padding:20px;text-align:center;margin:20px 0;'>
+                            <span style='font-size:36px;font-weight:900;letter-spacing:10px;color:#1E5652;'>{otp}</span>
+                        </div>
+                        <p style='color:#e07a5f;font-size:13px;text-align:center;'>⏳ Mã có hiệu lực trong <strong>5 phút</strong> và chỉ dùng được <strong>1 lần</strong>.</p>
+                    </div>";
+
+                try
+                {
+                    await _emailService.SendEmailAsync(user.Email, "Mã OTP Đăng Nhập - SmartLib", htmlMessage);
+                }
+                catch (Exception emailEx)
+                {
+                    Console.WriteLine($"[OTP] Email failed: {emailEx.Message}");
+                }
+
+                return Ok(new
+                {
+                    Message = "Mã OTP đã được gửi đến email của bạn.",
+                    Email = MaskEmail(user.Email),
+                    FullName = user.FullName ?? user.UserName
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[OTP] RequestOtp error: {ex}");
+                return StatusCode(500, new { Message = $"Lỗi server: {ex.Message}" });
+            }
+        }
+
+        // =====================================================================
+        // QR CODE LOGIN — Bước 2: Nhập OTP → nhận JWT token
+        // =====================================================================
+        [AllowAnonymous]
+        [EnableRateLimiting("auth")]
+        [HttpPost("login-otp")]
+        public async Task<IActionResult> LoginWithOtp([FromBody] LoginWithOtpDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var card = await _context.LibraryCards.FirstOrDefaultAsync(c => c.CardNumber == dto.CardNumber);
+                if (card == null)
+                    return Unauthorized(new { Message = "Mã thẻ không hợp lệ." });
+
+                var user = await _userManager.FindByIdAsync(card.UserId);
+                if (user == null || !user.IsActive)
+                    return Unauthorized(new { Message = "Tài khoản không tồn tại hoặc đã bị khóa." });
+
+                if (!_otpService.ValidateOtp(user.Id, dto.Otp))
+                    return Unauthorized(new { Message = "Mã OTP không đúng hoặc đã hết hạn." });
+
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Count == 0) roles = new List<string> { user.Role };
+
+                var cardForToken = await _context.LibraryCards.FirstOrDefaultAsync(c => c.UserId == user.Id);
+                var accessToken = _jwtTokenService.GenerateAccessToken(user, roles, cardForToken?.CardNumber);
+                var refreshToken = _jwtTokenService.GenerateRefreshToken();
+
+                user.PreviousRefreshToken = null;
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                user.UpdatedAt = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+
+                await _eventLogService.LogAsync("user.login.qr", new
+                {
+                    userId = user.Id,
+                    username = user.UserName,
+                    method = "QR+OTP"
+                });
+
+                return Ok(new AuthResponseDto
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    Username = user.UserName!,
+                    Email = user.Email!,
+                    Role = user.Role,
+                    UserId = user.Id,
+                    CardNumber = cardForToken?.CardNumber
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[OTP] LoginWithOtp error: {ex}");
+                return StatusCode(500, new { Message = $"Lỗi server: {ex.Message}" });
+            }
+        }
+
+        private static string MaskEmail(string email)
+        {
+            var at = email.IndexOf('@');
+            if (at <= 2) return email;
+            return email[..2] + new string('*', Math.Min(at - 2, 4)) + email[at..];
         }
     }
 }

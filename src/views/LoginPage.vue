@@ -141,12 +141,12 @@
       <div class="form-panel-right">
         <div class="form-content-wrapper">
           <h2 class="auth-title-login">{{ t('login.title') }}</h2>
-          <a-form :model="formState" @finish="onFinish" layout="vertical">
+          <a-form :model="formState" @finish="onFinish" layout="vertical" autocomplete="off">
             <a-form-item :label="t('login.username.label')" name="username" :rules="[{ required: true, message: t('login.username.required') }]">
-              <a-input v-model:value="formState.username" :placeholder="t('login.username.placeholder')" class="pill-input"/>
+              <a-input v-model:value="formState.username" :placeholder="t('login.username.placeholder')" class="pill-input" autocomplete="off"/>
             </a-form-item>
             <a-form-item :label="t('login.password.label')" name="password" :rules="[{ required: true, message: t('login.password.required') }]" class="mb-2">
-              <a-input-password v-model:value="formState.password" :placeholder="t('login.password.placeholder')" class="pill-input"/>
+              <a-input-password v-model:value="formState.password" :placeholder="t('login.password.placeholder')" class="pill-input" autocomplete="new-password"/>
             </a-form-item>
             <div class="text-right mb-6">
               <a href="#" class="forgot-password-link" @click.prevent="$router.push('/forgot-password')">{{ t('login.forgot') }}</a>
@@ -155,10 +155,10 @@
               <a-button type="primary" html-type="submit" class="btn-login-pill" :loading="loading">{{ t('login.btn') }}</a-button>
             </a-form-item>
             <div class="text-center mb-4">
-              <a-button class="btn-faceid-pill" @click="loginWithFaceId">
-                <v-icon icon="mdi-face-recognition" class="mr-2"></v-icon>
-                Đăng nhập bằng Face ID / Touch ID
-              </a-button>
+              <button class="btn-faceid-pill" type="button" @click="showQrModal = true">
+                <span style="margin-right:6px">📷</span>
+                Đăng nhập bằng Thẻ QR
+              </button>
             </div>
           </a-form>
           <div class="footer-links-signin mt-6">
@@ -179,6 +179,9 @@
 
     </div>
   </div>
+
+  <!-- QR Login Modal -->
+  <QrLoginModal :show="showQrModal" @close="showQrModal = false" @success="onQrLoginSuccess" />
 </template>
 
 <script setup lang="ts">
@@ -190,6 +193,7 @@ import { saveAuthSession, clearAuthSession, parseJwtPayload } from '@/utils/auth
 import { N2_LIBRARIAN_URL, N2_READER_URL, redirectWithHandoffCode } from '@/utils/authHandoff'
 import { useI18nStore } from '@/stores/i18nStore'
 import { useLibraryStore } from '@/stores/libraryStore'
+import QrLoginModal from '@/components/QrLoginModal.vue'
 
 const router = useRouter()
 const loading = ref(false)
@@ -197,6 +201,31 @@ const formState = reactive({ username: '', password: '' })
 const i18n = useI18nStore()
 const t = (key: Parameters<typeof i18n.t>[0]) => i18n.t(key)
 const lib = useLibraryStore()
+const showQrModal = ref(false)
+
+async function onQrLoginSuccess(data: any) {
+  showQrModal.value = false
+  saveAuthSession(data)
+
+  const token = data.accessToken || data.AccessToken || ''
+  const payload = parseJwtPayload(token)
+  const roleClaim =
+    payload?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ||
+    payload?.role ||
+    payload?.Role ||
+    ''
+  const userRole = Array.isArray(roleClaim) ? roleClaim[0] : roleClaim
+
+  message.success('Đăng nhập bằng thẻ QR thành công!')
+  const roleLower = String(userRole).toLowerCase()
+  if (roleLower === 'admin') {
+    window.location.assign('/dashboard')
+  } else if (roleLower === 'librarian') {
+    await redirectWithHandoffCode(N2_LIBRARIAN_URL)
+  } else {
+    await redirectWithHandoffCode(N2_READER_URL)
+  }
+}
 
 const onFinish = async (values: any) => {
   loading.value = true
@@ -232,6 +261,7 @@ const onFinish = async (values: any) => {
     loading.value = false
   }
 }
+
 
 // Helper: convert base64url string to Uint8Array
 const base64urlToUint8Array = (base64url: string): Uint8Array<ArrayBuffer> => {

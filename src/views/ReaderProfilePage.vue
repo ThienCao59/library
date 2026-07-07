@@ -99,6 +99,9 @@
             <span class="lc-status-badge" :class="libraryCard.status?.toLowerCase()">
               {{ libraryCard.status || 'Active' }}
             </span>
+            <button class="btn-print-card" @click="showPrintModal = true" title="In thẻ thư viện">
+              <PrinterOutlined />
+            </button>
           </div>
         </div>
         <div v-else class="no-card">
@@ -151,6 +154,35 @@
       </a-form>
     </a-modal>
 
+    <!-- MODAL IN THẺ -->
+    <a-modal
+      v-model:open="showPrintModal"
+      title="Thẻ Thư Viện (Dùng để Đăng nhập QR)"
+      :footer="null"
+      :width="420"
+    >
+      <div id="print-area" class="print-wrapper">
+        <div class="print-card-box">
+          <div class="pc-header">SMARTLIB LIBRARY CARD</div>
+          <div class="pc-body">
+            <div class="pc-info">
+              <p class="pc-name">{{ profileData?.fullName || profileData?.FullName }}</p>
+              <p class="pc-role">{{ profileData?.role || profileData?.Role || 'Reader' }}</p>
+              <div class="pc-number">{{ formatCardNumber(libraryCard?.cardNumber || '') }}</div>
+            </div>
+            <div class="pc-qr">
+              <qrcode-vue :value="libraryCard?.cardNumber || ''" :size="90" level="H" />
+            </div>
+          </div>
+          <div class="pc-footer">Vui lòng xuất trình hoặc quét mã QR này tại trạm kiểm soát.</div>
+        </div>
+      </div>
+      <div class="modal-btns no-print">
+        <a-button size="large" @click="showPrintModal = false">Đóng</a-button>
+        <a-button type="primary" size="large" class="btn-save-modal" @click="doPrint">🖨️ In Thẻ (Print)</a-button>
+      </div>
+    </a-modal>
+
   </div>
 </template>
 
@@ -161,11 +193,12 @@ import { message } from 'ant-design-vue'
 import { apiClient } from '@/utils/apiClient'
 import { formatVnDate } from '@/utils/dateTime'
 import { useI18nStore } from '@/stores/i18nStore'
+import QrcodeVue from 'qrcode.vue'
 import {
   ArrowLeftOutlined, UserOutlined, MailOutlined, PhoneOutlined,
   IdcardOutlined, CreditCardOutlined, ReadOutlined, EditOutlined,
   DisconnectOutlined, SafetyCertificateOutlined,
-  LockOutlined, HistoryOutlined, FrownOutlined
+  LockOutlined, HistoryOutlined, FrownOutlined, PrinterOutlined
 } from '@ant-design/icons-vue'
 
 const i18n = useI18nStore()
@@ -179,6 +212,11 @@ const profileData = ref<any>(null)
 const showEditModal = ref(false)
 const saving = ref(false)
 const editForm = ref({ fullName: '', phoneNumber: '' })
+const showPrintModal = ref(false)
+
+const doPrint = () => {
+  window.print()
+}
 
 const isSelfProfile = computed(() => route.path === '/profile')
 const readerId = computed(() => route.params.id as string)
@@ -685,4 +723,116 @@ onMounted(fetchProfileData)
   background: linear-gradient(135deg, #1E5652, #114B44) !important;
   border: none !important;
 }
+
+/* ── PRINT MODAL ──────────────────────────────── */
+.btn-print-card {
+  margin-left: 10px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.btn-print-card:hover { background: rgba(255,255,255,0.4); }
+
+.print-wrapper {
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+.print-card-box {
+  width: 340px;
+  border: 2px solid #1E5652;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.pc-header {
+  background: #1E5652;
+  color: white;
+  text-align: center;
+  font-weight: 800;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.pc-body {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.pc-info {
+  flex: 1;
+}
+.pc-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a202c;
+  line-height: 1.2;
+}
+.pc-role {
+  margin: 4px 0 12px;
+  font-size: 11px;
+  color: #6A7B6B;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.pc-number {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1E5652;
+}
+.pc-qr {
+  margin-left: 15px;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 1px #eee;
+}
+.pc-footer {
+  background: #f9f9f9;
+  text-align: center;
+  font-size: 10px;
+  color: #888;
+  padding: 8px;
+  border-top: 1px solid #eee;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .no-print {
+    display: none !important;
+  }
+  #print-area, #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 0;
+  }
+  .ant-modal-mask, .ant-modal-wrap {
+    background: white !important;
+  }
+  .ant-modal-content {
+    box-shadow: none !important;
+  }
+  .ant-modal-header, .ant-modal-close {
+    display: none !important;
+  }
+}
+
 </style>

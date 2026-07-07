@@ -33,6 +33,7 @@ builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.AddAuthorizationPolicies();
 builder.Services.AddInfrastructureConfiguration(builder.Configuration);
 builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<IdentityReportService.Services.IOtpService, IdentityReportService.Services.OtpService>();
 
 var fido2Config = new Fido2Configuration
 {

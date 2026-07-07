@@ -18,6 +18,11 @@ export const N2_LIBRARIAN_FINES_URL =
   import.meta.env.VITE_N2_LIBRARIAN_FINES_URL ||
   `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}?embed=1#/fines`
 
+/** Trang đánh giá của N2 (embed/reviews) */
+export const N2_LIBRARIAN_REVIEWS_URL =
+  import.meta.env.VITE_N2_LIBRARIAN_REVIEWS_URL ||
+  `${N2_LIBRARIAN_URL.replace(/\/?$/, '/')}embed/reviews`
+
 export const N2_READER_URL =
   import.meta.env.VITE_N2_READER_URL || 'http://163.223.210.87:5082/ui/reader/'
 

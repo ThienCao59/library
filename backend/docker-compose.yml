@@ -7,7 +7,7 @@ version: '3.8'
 
 services:
   sql-server:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: library_shared_sql_server
     environment:
       - ACCEPT_EULA=Y

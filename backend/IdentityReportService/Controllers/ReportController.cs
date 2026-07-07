@@ -445,13 +445,15 @@ namespace IdentityReportService.Controllers
                     var raw = value.GetString();
                     if (!string.IsNullOrWhiteSpace(raw))
                     {
-                        // Try DateTimeOffset first — respects Z, +07:00, etc.
-                        if (DateTimeOffset.TryParse(raw, null,
-                            System.Globalization.DateTimeStyles.RoundtripKind, out var dto))
-                            return dto.UtcDateTime;
+                        // Nếu chuỗi có Z hoặc +07:00
+                        if (raw.EndsWith("Z", StringComparison.OrdinalIgnoreCase) || raw.Contains("+") || (raw.Contains("T") && raw.LastIndexOf("-") > raw.IndexOf("T")))
+                        {
+                            if (DateTimeOffset.TryParse(raw, null, System.Globalization.DateTimeStyles.RoundtripKind, out var dto))
+                                return dto.UtcDateTime;
+                        }
 
                         // No timezone info: N2 likely sends Vietnam local time → subtract 7h to get UTC
-                        if (DateTime.TryParse(raw, out var parsed) && parsed.Kind == DateTimeKind.Unspecified)
+                        if (DateTime.TryParse(raw, out var parsed))
                             return parsed.AddHours(-7);
                     }
                 }
